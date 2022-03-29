@@ -18,7 +18,21 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from rest_framework.routers import DefaultRouter
+
+from main.views import *
+
+from main.views import ProductViewSet, ImagesViewSet, ColorsViewSet, CollectionViewSet
+router = DefaultRouter()
+router.register('product', ProductViewSet)
+# router.register('images', ImagesViewSet)
+# router.register('colors', ColorsViewSet)
+# router.register('collection', CollectionViewSet)
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('others.urls')),
+    path('api/v1/', include(router.urls)),
+    path('api/v1/products/<str:name>/', filter, name="filter"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
