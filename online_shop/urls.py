@@ -27,7 +27,7 @@ router = DefaultRouter()
 router.register('product', ProductViewSet)
 # router.register('images', ImagesViewSet)
 # router.register('colors', ColorsViewSet)
-# router.register('collection', CollectionViewSet)
+router.register('collections', CollectionViewSet)
 
 
 urlpatterns = [

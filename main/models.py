@@ -3,6 +3,7 @@ from django.db import models
 from ckeditor.fields import RichTextField
 
 from colorful.fields import RGBColorField
+from django.utils.text import slugify
 
 
 class Colors(models.Model):

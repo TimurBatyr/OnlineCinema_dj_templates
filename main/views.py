@@ -5,11 +5,19 @@ from rest_framework import generics, viewsets, status
 
 # from .filters import ProductFilter
 from rest_framework.decorators import action, api_view
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 from .models import Product, Image, Collection, Colors
 from .serializers import ProductSerializer, ImageSerializer, CollectionSerializer, ColorsSerializer, \
     SimilarProductSerializer
+
+
+class MyPaginationClass(PageNumberPagination):
+    page_size = 8
+
+    def get_paginated_response(self, data):
+        return super().get_paginated_response(data)
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -49,6 +57,7 @@ class ImagesViewSet(viewsets.ModelViewSet):
 class CollectionViewSet(viewsets.ModelViewSet):
     queryset = Collection.objects.all()
     serializer_class = CollectionSerializer
+    pagination_class = MyPaginationClass
 
 
 class ColorsViewSet(viewsets.ModelViewSet):

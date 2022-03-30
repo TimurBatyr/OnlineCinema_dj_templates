@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .models import Colors, Collection, Product, Image
 
 
+
 class ColorsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Colors
@@ -12,7 +13,7 @@ class ColorsSerializer(serializers.ModelSerializer):
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
-        fields = ('name',)
+        fields = ('id', 'name', 'image',)
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -38,7 +39,7 @@ class SimilarProductSerializer(ProductSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['images'] = ImageSerializer(instance.images.all(), many=True, context=self.context).data
+        representation['images'] = ImageSerializer(instance.images.all()[:1], many=True, context=self.context).data
         return representation
 
 
