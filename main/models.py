@@ -19,7 +19,7 @@ class Collection(models.Model):
     image = models.ImageField(upload_to='images')
 
     def __str__(self):
-        return self.name
+        return f'ID {self.id} : {self.name}'
 
     class Meta:
         ordering = ['id']
@@ -38,7 +38,7 @@ class Product(models.Model):
     material = models.CharField(max_length=100)
     favorites = models.BooleanField(default=False)
     bestseller = models.BooleanField(default=False)
-    trend = models.BooleanField(default=True)
+    new = models.BooleanField(default=True)
     colors = models.ManyToManyField(Colors, related_name='product')
     collection = models.ForeignKey(Collection, on_delete=models.DO_NOTHING, null=True, blank=True)
 

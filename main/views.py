@@ -10,14 +10,21 @@ from rest_framework.response import Response
 
 from .models import Product, Image, Collection, Colors
 from .serializers import ProductSerializer, ImageSerializer, CollectionSerializer, ColorsSerializer, \
-    SimilarProductSerializer
+    SimilarProductSerializer, CollectionProductSerializer, NewProductSerializer
 
 
-class MyPaginationClass(PageNumberPagination):
-    page_size = 8
+class Pagination(PageNumberPagination):
 
     def get_paginated_response(self, data):
         return super().get_paginated_response(data)
+
+
+class CollectionPagination(Pagination):
+    page_size = 8
+
+
+class CollectionProductPagination(Pagination):
+    page_size = 12
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -31,12 +38,11 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 @api_view(['GET'])
 def filter(request, name):
-    print("hello")
     collection = Collection.objects.get(name=name)
-    print(collection)
     queryset = Product.objects.filter(collection=collection)[0:5]
     serializer = SimilarProductSerializer(queryset, many=True)
     return Response(serializer.data)
+
 
 
     #
@@ -57,9 +63,28 @@ class ImagesViewSet(viewsets.ModelViewSet):
 class CollectionViewSet(viewsets.ModelViewSet):
     queryset = Collection.objects.all()
     serializer_class = CollectionSerializer
-    pagination_class = MyPaginationClass
+    pagination_class = CollectionPagination
+
+
+class CollectionProductView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    pagination_class = CollectionProductPagination
+
+    def list(self, request, pk):
+        queryset = Product.objects.filter(collection=pk)
+        serializer = CollectionProductSerializer(queryset, many=True)
+        page = self.paginate_queryset(serializer.data)
+        return self.get_paginated_response(page)
+        #return Response(serializer.data)
 
 
 class ColorsViewSet(viewsets.ModelViewSet):
     queryset = Colors.objects.all()
     serializer_class = ColorsSerializer
+
+
+@api_view(['GET'])
+def new_product(request):
+    new_product = Product.objects.all().filter(new=True)[0:5]
+    serializer = NewProductSerializer(new_product, many=True)
+    return Response(serializer.data)

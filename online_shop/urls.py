@@ -20,6 +20,7 @@ from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
 
+from main import views
 from main.views import *
 
 from main.views import ProductViewSet, ImagesViewSet, ColorsViewSet, CollectionViewSet
@@ -28,6 +29,7 @@ router.register('product', ProductViewSet)
 # router.register('images', ImagesViewSet)
 # router.register('colors', ColorsViewSet)
 router.register('collections', CollectionViewSet)
+# router.register('collections/product/<str:id>', CollectionProductViewSet)
 
 
 urlpatterns = [
@@ -35,4 +37,6 @@ urlpatterns = [
     path('api/v1/', include('others.urls')),
     path('api/v1/', include(router.urls)),
     path('api/v1/products/<str:name>/', filter, name="filter"),
+    path('api/v1/collection/<int:pk>/', CollectionProductView.as_view()),
+    path('api/v1/new_product/', views.new_product)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
