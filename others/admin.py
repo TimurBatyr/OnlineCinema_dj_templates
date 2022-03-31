@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from .models import AboutUs, Image
+from .models import AboutUs, Image, News
 
 
 class ImageInLine(admin.TabularInline):
@@ -13,4 +13,6 @@ class ImageInLine(admin.TabularInline):
 class AboutUSAdmin(admin.ModelAdmin):
     inlines = [ImageInLine, ]
 
+
+admin.site.register(News)
 

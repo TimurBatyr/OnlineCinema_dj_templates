@@ -38,5 +38,5 @@ urlpatterns = [
     path('api/v1/', include(router.urls)),
     path('api/v1/products/<str:name>/', filter, name="filter"),
     path('api/v1/collection/<int:pk>/', CollectionProductView.as_view()),
-    path('api/v1/new_product/', views.new_product)
+    path('api/v1/new_products/', views.new_products)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

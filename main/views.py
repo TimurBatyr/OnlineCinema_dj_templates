@@ -84,7 +84,7 @@ class ColorsViewSet(viewsets.ModelViewSet):
 
 
 @api_view(['GET'])
-def new_product(request):
-    new_product = Product.objects.all().filter(new=True)[0:5]
-    serializer = NewProductSerializer(new_product, many=True)
+def new_products(request):
+    new_products = Product.objects.all().filter(new=True)[0:5]
+    serializer = NewProductSerializer(new_products, many=True)
     return Response(serializer.data)
