@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import AboutUs, Image, News
+from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp
 
 
 class AboutUsSerializer(serializers.ModelSerializer):
@@ -16,7 +16,7 @@ class AboutUsSerializer(serializers.ModelSerializer):
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Image
+        model = ImageAboutUs
         fields = '__all__'
 
 
@@ -24,3 +24,17 @@ class NewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
         fields = '__all__'
+
+
+class HelpSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Help
+        exclude = ('id',)
+
+
+class ImageHelpSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImageHelp
+        exclude = ('id',)
+
+

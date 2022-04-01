@@ -7,7 +7,7 @@ class AboutUs(models.Model):
     description = RichTextField()
 
 
-class Image(models.Model):
+class ImageAboutUs(models.Model):
     image = models.ImageField(upload_to='images')
     about_us = models.ForeignKey(AboutUs, on_delete=models.CASCADE, related_name='images')
 
@@ -16,6 +16,16 @@ class News(models.Model):
     header = models.CharField(max_length=100)
     description = RichTextField()
     image = models.ImageField(upload_to='images')
+
+
+class Help(models.Model):
+    question = models.CharField(max_length=100)
+    answer = models.CharField(max_length=100, blank=True)
+
+
+class ImageHelp(models.Model):
+    image = models.ImageField(upload_to='images')
+
 
 
 

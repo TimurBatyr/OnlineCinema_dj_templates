@@ -1,18 +1,20 @@
 from django import forms
 from django.contrib import admin
-from .models import AboutUs, Image, News
+from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp
 
 
-class ImageInLine(admin.TabularInline):
-    model = Image
+class ImageAboutUsInLine(admin.TabularInline):
+    model = ImageAboutUs
     max_num = 3
     min_num = 1
 
 
 @admin.register(AboutUs)
 class AboutUSAdmin(admin.ModelAdmin):
-    inlines = [ImageInLine, ]
+    inlines = [ImageAboutUsInLine, ]
 
 
 admin.site.register(News)
+admin.site.register(Help)
+admin.site.register(ImageHelp)
 
