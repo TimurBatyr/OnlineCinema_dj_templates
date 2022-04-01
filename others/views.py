@@ -4,8 +4,8 @@ from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import AboutUs, News, Help, ImageHelp
-from .serializers import AboutUsSerializer, NewsSerializer, ImageHelpSerializer, HelpSerializer
+from .models import AboutUs, News, Help, ImageHelp, PublicOffer
+from .serializers import AboutUsSerializer, NewsSerializer, ImageHelpSerializer, HelpSerializer, PublicOfferSerializer
 
 
 @api_view(['GET'])
@@ -31,3 +31,11 @@ class HelpView(generics.ListAPIView):
         queryset = Help.objects.all()
         serializers = HelpSerializer(queryset, many=True)
         return Response([image.data, serializers.data])
+
+
+class PublicOfferView(generics.ListAPIView):
+    queryset = PublicOffer.objects.all()
+    serializer_class = PublicOfferSerializer
+
+
+

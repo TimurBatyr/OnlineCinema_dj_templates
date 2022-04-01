@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp
+from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp, PublicOffer
 
 
 class AboutUsSerializer(serializers.ModelSerializer):
@@ -37,5 +37,10 @@ class ImageHelpSerializer(serializers.ModelSerializer):
         model = ImageHelp
         exclude = ('id',)
 
+
+class PublicOfferSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PublicOffer
+        exclude = ('id',)
 
 

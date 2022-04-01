@@ -34,6 +34,11 @@ class Excellence(models.Model):
     description = RichTextField()
 
 
+class PublicOffer(models.Model):
+    header = models.CharField(max_length=100)
+    description = RichTextField()
 
+    def __str__(self):
+        return self.header
 
 
