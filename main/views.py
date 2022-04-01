@@ -30,7 +30,7 @@ class CollectionProductPagination(Pagination):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    serializer_class = SimilarProductSerializer
+    # serializer_class = SimilarProductSerializer
     # filter_backends = [DjangoFilterBackend]
     # # filterset_fields = ['collection', ]
     # filterset_class = ProductFilter

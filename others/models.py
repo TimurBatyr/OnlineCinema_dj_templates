@@ -1,3 +1,4 @@
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from ckeditor.fields import RichTextField
 
@@ -25,6 +26,13 @@ class Help(models.Model):
 
 class ImageHelp(models.Model):
     image = models.ImageField(upload_to='images')
+
+
+class Excellence(models.Model):
+    icon = models.FileField(upload_to='images', validators=[FileExtensionValidator(['svg', 'png'])])
+    header = models.CharField(max_length=100)
+    description = RichTextField()
+
 
 
 

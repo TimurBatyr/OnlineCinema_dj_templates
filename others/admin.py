@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp
+from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp, Excellence
 
 
 class ImageAboutUsInLine(admin.TabularInline):
@@ -17,4 +17,5 @@ class AboutUSAdmin(admin.ModelAdmin):
 admin.site.register(News)
 admin.site.register(Help)
 admin.site.register(ImageHelp)
+admin.site.register(Excellence)
 
