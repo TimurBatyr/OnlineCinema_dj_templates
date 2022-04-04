@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp, PublicOffer, Slider
+from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp, PublicOffer, Slider, Excellence
 
 
 class AboutUsSerializer(serializers.ModelSerializer):
@@ -51,7 +51,15 @@ class PublicOfferSerializer(serializers.ModelSerializer):
 
 
 class SliderSerializer(serializers.ModelSerializer):
-    """Слайдер"""
+    """Слайдер на главной странице"""
     class Meta:
         model = Slider
+        exclude = ('id',)
+
+
+class ExcellenceSerializer(serializers.ModelSerializer):
+    """Наши преимущества на главной странице"""
+
+    class Meta:
+        model = Excellence
         exclude = ('id',)

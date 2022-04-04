@@ -2,9 +2,9 @@ from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import AboutUs, News, Help, ImageHelp, PublicOffer, Slider
+from .models import AboutUs, News, Help, ImageHelp, PublicOffer, Slider, Excellence
 from .serializers import AboutUsSerializer, NewsSerializer, ImageHelpSerializer, HelpSerializer, PublicOfferSerializer, \
-    SliderSerializer
+    SliderSerializer, ExcellenceSerializer
 
 
 @api_view(['GET'])
@@ -42,8 +42,13 @@ class PublicOfferView(generics.ListCreateAPIView):
 
 
 class SliderViewSet(viewsets.ModelViewSet):
-    """Слайдер"""
+    """Слайдер.Гловная страница"""
     queryset = Slider.objects.all()
     serializer_class = SliderSerializer
 
+
+class ExcellenceViewSet(viewsets.ModelViewSet):
+    """Наши преимущества на главной странице"""
+    queryset = Excellence.objects.all()[0:4]
+    serializer_class = ExcellenceSerializer
 

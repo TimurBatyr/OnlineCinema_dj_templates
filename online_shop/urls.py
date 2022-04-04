@@ -5,14 +5,14 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from main.views import *
-from others.views import SliderViewSet
+from others.views import SliderViewSet, ExcellenceViewSet
 
 router = DefaultRouter()
 router.register('product', ProductViewSet) #URL для товара +id
 router.register('collections', CollectionViewSet) #URL для коллекций
 router.register('slider', SliderViewSet) #URL для слайдера
 router.register('collections_mainpage', CollectionMainPageViewSet) #URL для коллекций на главной странице
-
+router.register('excellence', ExcellenceViewSet) #URL для наших преимуществ на главной странице
 
 urlpatterns = [
     path('admin/', admin.site.urls),
