@@ -1,6 +1,6 @@
-from django import forms
 from django.contrib import admin
-from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp, Excellence, PublicOffer
+
+from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp, Excellence, PublicOffer, Slider
 
 
 class ImageAboutUsInLine(admin.TabularInline):
@@ -19,5 +19,8 @@ admin.site.register(Help)
 admin.site.register(ImageHelp)
 admin.site.register(Excellence)
 admin.site.register(PublicOffer)
+admin.site.register(Slider)
+
+
 
 

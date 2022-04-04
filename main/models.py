@@ -1,12 +1,11 @@
 from django.db import models
 
 from ckeditor.fields import RichTextField
-
 from colorful.fields import RGBColorField
-from django.utils.text import slugify
 
 
 class Colors(models.Model):
+    """Цвета для товаров"""
     name = models.CharField(max_length=50)
     color = RGBColorField()
 
@@ -15,6 +14,7 @@ class Colors(models.Model):
 
 
 class Collection(models.Model):
+    """Колллекция"""
     name = models.CharField(max_length=100)
     image = models.ImageField(upload_to='images')
 
@@ -26,6 +26,7 @@ class Collection(models.Model):
 
 
 class Product(models.Model):
+    """Товар"""
     name = models.CharField(max_length=100)
     item_number = models.CharField(max_length=100)
     price = models.PositiveIntegerField(blank=True)
@@ -53,11 +54,9 @@ class Product(models.Model):
         return f'ID {self.id} : {self.name}'
 
 
-class Image(models.Model):
+class ImageProduct(models.Model):
+    """Фотографии для товара"""
     image = models.ImageField(upload_to='images')
     product = models.ForeignKey(Product, on_delete=models.DO_NOTHING, related_name='images')
 
 
-# class Favorites(models.Model):
-#     product = models.ForeignKey(Product, on_delete=models.DO_NOTHING, related_name='favorites')
-#     favorites = models.BooleanField(default=True)

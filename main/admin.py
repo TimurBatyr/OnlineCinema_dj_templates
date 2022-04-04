@@ -1,17 +1,20 @@
-from ckeditor.widgets import CKEditorWidget
 from django.contrib import admin
 from django import forms
 
-from .models import Image, Collection, Product, Colors
+from ckeditor.widgets import CKEditorWidget
+
+from .models import ImageProduct, Collection, Product, Colors
 
 
 class ImageInLine(admin.TabularInline):
-    model = Image
+    """Таким образом ограничил фотографии"""
+    model = ImageProduct
     max_num = 8
     min_num = 0
 
 
 class ProductForm(forms.ModelForm):
+    """Товар"""
     description = forms.CharField(widget=CKEditorWidget(), label=Product._meta.get_field('description').verbose_name)
 
     class Meta:
@@ -21,7 +24,7 @@ class ProductForm(forms.ModelForm):
     def clean(self):
         if self.cleaned_data['colors']:
             if len(self.cleaned_data.get('colors')) > 8:
-                raise forms.ValidationError('The number of colors cannot exceed 8!')
+                raise forms.ValidationError('Number of colors cannot exceed 8!')
 
 
 @admin.register(Product)

@@ -1,22 +1,24 @@
 from rest_framework import serializers
 
-from .models import Colors, Collection, Product, Image
-
+from .models import Colors, Collection, Product, ImageProduct
 
 
 class ColorsSerializer(serializers.ModelSerializer):
+    """Цвета для товаров"""
     class Meta:
         model = Colors
         fields = ('name',)
 
 
 class CollectionSerializer(serializers.ModelSerializer):
+    """Коллекция"""
     class Meta:
         model = Collection
         fields = ('id', 'name', 'image',)
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    """Товар"""
     colors = ColorsSerializer(read_only=True, many=True)
     collection = CollectionSerializer()
 
@@ -32,7 +34,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class SimilarProductSerializer(ProductSerializer):
-
+    """Товары по категории"""
     class Meta:
         model = Product
         fields = ('id', 'name', 'price', 'old_price', 'discount', 'size', 'colors', 'favorites',)
@@ -44,25 +46,29 @@ class SimilarProductSerializer(ProductSerializer):
 
 
 class CollectionProductSerializer(SimilarProductSerializer):
+    """Коллекция товаров"""
     pass
-    # class Meta:
-    #     model = Product
-    #     fields = ('id', 'name', 'price', 'old_price', 'discount', 'size', 'colors', 'favorites',)
-    #
-    # def to_representation(self, instance):
-    #     representation = super().to_representation(instance)
-    #     representation['images'] = ImageSerializer(instance.images.all()[:1], many=True, context=self.context).data
-    #     return representation
 
 
 class NewProductSerializer(SimilarProductSerializer):
+    """Новинки товаров"""
     pass
 
 
+class BestsellerSerializer(SimilarProductSerializer):
+    """Хит продаж"""
+    pass
+
+
+class NovinkiSerializer(SimilarProductSerializer):
+    """Новинки на главной странце"""
+    pass
+
 
 class ImageSerializer(serializers.ModelSerializer):
+    """Фотографии для товаров"""
     class Meta:
-        model = Image
+        model = ImageProduct
         fields = '__all__'
 
 

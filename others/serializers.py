@@ -1,9 +1,10 @@
 from rest_framework import serializers
 
-from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp, PublicOffer
+from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp, PublicOffer, Slider
 
 
 class AboutUsSerializer(serializers.ModelSerializer):
+    """О нас"""
     class Meta:
         model = AboutUs
         fields = '__all__'
@@ -15,32 +16,42 @@ class AboutUsSerializer(serializers.ModelSerializer):
 
 
 class ImageSerializer(serializers.ModelSerializer):
+    """О нас"""
     class Meta:
         model = ImageAboutUs
         fields = '__all__'
 
 
 class NewsSerializer(serializers.ModelSerializer):
+    """Новости"""
     class Meta:
         model = News
-        fields = '__all__'
+        exclude = ('id',)
 
 
 class HelpSerializer(serializers.ModelSerializer):
+    """Помощь"""
     class Meta:
         model = Help
         exclude = ('id',)
 
 
 class ImageHelpSerializer(serializers.ModelSerializer):
+    """Фотография для помощи"""
     class Meta:
         model = ImageHelp
         exclude = ('id',)
 
 
 class PublicOfferSerializer(serializers.ModelSerializer):
+    """Публичная оферта"""
     class Meta:
         model = PublicOffer
         exclude = ('id',)
 
 
+class SliderSerializer(serializers.ModelSerializer):
+    """Слайдер"""
+    class Meta:
+        model = Slider
+        exclude = ('id',)

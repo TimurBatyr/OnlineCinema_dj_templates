@@ -1,42 +1,26 @@
-"""online_shop URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-
 from rest_framework.routers import DefaultRouter
 
-from main import views
 from main.views import *
+from others.views import SliderViewSet
 
-from main.views import ProductViewSet, ImagesViewSet, ColorsViewSet, CollectionViewSet
 router = DefaultRouter()
-router.register('product', ProductViewSet)
-# router.register('images', ImagesViewSet)
-# router.register('colors', ColorsViewSet)
-router.register('collections', CollectionViewSet)
-# router.register('collections/product/<str:id>', CollectionProductViewSet)
+router.register('product', ProductViewSet) #URL для товара +id
+router.register('collections', CollectionViewSet) #URL для коллекций
+router.register('slider', SliderViewSet) #URL для слайдера
+router.register('collections_mainpage', CollectionMainPageViewSet) #URL для коллекций на главной странице
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('others.urls')),
     path('api/v1/', include(router.urls)),
-    path('api/v1/products/<str:name>/', filter, name="filter"),
-    path('api/v1/collection/<int:pk>/', CollectionProductView.as_view()),
-    path('api/v1/new_products/', views.new_products)
+    path('api/v1/products/filter/<str:name>/', filter, name="filter"), #URL для фильтрации товаров в категории
+    path('api/v1/collection/<int:pk>/', CollectionProductView.as_view()), #URL для коллекции товаров
+    path('api/v1/new_products/', new_products), #URL для новинок
+    path('api/v1/bestseller/', bestseller), #URL для хит продаж
+    path('api/v1/novinki/', novinki), #URL для новинок на главной странице
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
