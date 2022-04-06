@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp, PublicOffer, Slider, Excellence
+from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp, PublicOffer, Slider, Excellence, Header, Footer
 
 
 class AboutUsSerializer(serializers.ModelSerializer):
@@ -63,3 +63,17 @@ class ExcellenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Excellence
         exclude = ('id',)
+
+
+class HeaderSerializer(serializers.ModelSerializer):
+    """Хэдер"""
+    class Meta:
+        model = Header
+        exclude = ('id',)
+
+
+class FooterSerializer(serializers.ModelSerializer):
+    """Футер"""
+    class Meta:
+        model = Footer
+        fields = ('type', 'link',)

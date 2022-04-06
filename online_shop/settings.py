@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'colorful',
     'django_filters',
+    'drf_multiple_model',
 
     #myapps
     'main',

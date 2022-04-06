@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp, Excellence, PublicOffer, Slider
+from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp, Excellence, PublicOffer, Slider, Header, Footer
 
 
 class ImageAboutUsInLine(admin.TabularInline):
@@ -20,7 +20,7 @@ admin.site.register(ImageHelp)
 admin.site.register(Excellence)
 admin.site.register(PublicOffer)
 admin.site.register(Slider)
-
-
+admin.site.register(Header)
+admin.site.register(Footer)
 
 

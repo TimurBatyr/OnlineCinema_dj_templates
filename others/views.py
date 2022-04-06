@@ -1,10 +1,12 @@
+from drf_multiple_model.pagination import MultipleModelLimitOffsetPagination
+from drf_multiple_model.views import ObjectMultipleModelAPIView
 from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import AboutUs, News, Help, ImageHelp, PublicOffer, Slider, Excellence
+from .models import AboutUs, News, Help, ImageHelp, PublicOffer, Slider, Excellence, Header, Footer
 from .serializers import AboutUsSerializer, NewsSerializer, ImageHelpSerializer, HelpSerializer, PublicOfferSerializer, \
-    SliderSerializer, ExcellenceSerializer
+    SliderSerializer, ExcellenceSerializer, FooterSerializer, HeaderSerializer
 
 
 @api_view(['GET'])
@@ -42,7 +44,7 @@ class PublicOfferView(generics.ListCreateAPIView):
 
 
 class SliderViewSet(viewsets.ModelViewSet):
-    """Слайдер.Гловная страница"""
+    """Слайдер.Главная страница"""
     queryset = Slider.objects.all()
     serializer_class = SliderSerializer
 
@@ -51,4 +53,17 @@ class ExcellenceViewSet(viewsets.ModelViewSet):
     """Наши преимущества на главной странице"""
     queryset = Excellence.objects.all()[0:4]
     serializer_class = ExcellenceSerializer
+
+
+class LimitPagination(MultipleModelLimitOffsetPagination):
+    default_limit = 50
+
+
+class HeaderFooterAPIView(ObjectMultipleModelAPIView):
+    """Хэдер и Футер: модельки и сериалайзеры объеденены в одну вьюшку"""
+    pagination_class = LimitPagination
+    querylist = (
+        {'queryset': Header.objects.all(), 'serializer_class': HeaderSerializer},
+        {'queryset': Footer.objects.all(), 'serializer_class': FooterSerializer},
+    )
 
