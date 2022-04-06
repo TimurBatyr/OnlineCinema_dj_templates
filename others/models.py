@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.db import models
 
 from django.core.validators import FileExtensionValidator
@@ -107,3 +106,34 @@ class Footer(models.Model):
 
     def __str__(self):
         return self.type
+
+
+class AdminContacts(models.Model):
+    """Для тикета плавающей кнопки(обратный звонок)"""
+    CONTACTS = (
+        ('Number', 'Number'),
+        ('Telegram', 'Telegram'),
+        ('Whatsapp', 'Whatsapp'))
+    type = models.CharField(max_length=100, choices=CONTACTS)
+    link = models.CharField(max_length=200)
+
+    def save(self, *args, **kwargs):
+        if self.type == 'Number':
+            self.link = f'{self.link}'
+        elif self.type == 'Whatsapp':
+            self.link = f'https://wa.me/{self.link}'
+        elif self.type == 'Telegram':
+            self.link = f'https://t.me/{self.link}/'
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.type
+
+
+class CallBack(models.Model):
+    """Обратный звонок"""
+    name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=20)
+    callback = models.BooleanField(default=True)
+    call_status = models.BooleanField(default=False)
+    date_created = models.DateTimeField(auto_now_add=True)

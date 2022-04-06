@@ -4,9 +4,11 @@ from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import AboutUs, News, Help, ImageHelp, PublicOffer, Slider, Excellence, Header, Footer
+from .models import AboutUs, News, Help, ImageHelp, PublicOffer, Slider, Excellence, Header, Footer, AdminContacts, \
+    CallBack
 from .serializers import AboutUsSerializer, NewsSerializer, ImageHelpSerializer, HelpSerializer, PublicOfferSerializer, \
-    SliderSerializer, ExcellenceSerializer, FooterSerializer, HeaderSerializer
+    SliderSerializer, ExcellenceSerializer, FooterSerializer, HeaderSerializer, AdminContactsSerializer, \
+    CallBackSerializer
 
 
 @api_view(['GET'])
@@ -67,3 +69,14 @@ class HeaderFooterAPIView(ObjectMultipleModelAPIView):
         {'queryset': Footer.objects.all(), 'serializer_class': FooterSerializer},
     )
 
+
+class AdminContactsViewSet(viewsets.ModelViewSet):
+    """Плавающая кнопка"""
+    queryset = AdminContacts.objects.all()
+    serializer_class = AdminContactsSerializer
+
+
+class CallBackViewSet(viewsets.ModelViewSet):
+    """Обратный звонок"""
+    queryset = CallBack.objects.all()
+    serializer_class = CallBackSerializer

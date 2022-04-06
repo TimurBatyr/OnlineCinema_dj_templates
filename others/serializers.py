@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp, PublicOffer, Slider, Excellence, Header, Footer
+from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp, PublicOffer, Slider, Excellence, Header, Footer, \
+    AdminContacts, CallBack
 
 
 class AboutUsSerializer(serializers.ModelSerializer):
@@ -77,3 +78,19 @@ class FooterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Footer
         fields = ('type', 'link',)
+
+
+class AdminContactsSerializer(serializers.ModelSerializer):
+    """Плавающая кнопка"""
+    class Meta:
+        model = AdminContacts
+        fields = ('type', 'link',)
+
+
+class CallBackSerializer(serializers.ModelSerializer):
+    """Обратный звонок"""
+    date_created = serializers.DateTimeField(format='%d/%m/%Y %H:%M:%S', read_only=True)
+
+    class Meta:
+        model = CallBack
+        exclude = ('id',)
