@@ -24,6 +24,18 @@ admin.site.register(Slider)
 admin.site.register(Header)
 admin.site.register(Footer)
 admin.site.register(AdminContacts)
-admin.site.register(CallBack)
+
+
+class CallBackAdmin(admin.ModelAdmin):
+    search_fields = ('name', 'phone',)
+    list_display = ['name', 'phone', 'call_status']
+    list_filter = ['call_status']
+
+
+admin.site.register(CallBack, CallBackAdmin)
+
+
+
+
 
 

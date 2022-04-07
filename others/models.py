@@ -137,3 +137,8 @@ class CallBack(models.Model):
     callback = models.BooleanField(default=True)
     call_status = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.name} - {self.phone}'
+
+
