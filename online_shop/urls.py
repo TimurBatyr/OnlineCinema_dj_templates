@@ -15,6 +15,8 @@ router.register('collections_mainpage', CollectionMainPageViewSet) #URL для �
 router.register('excellence', ExcellenceViewSet) #URL для наших преимуществ на главной странице
 router.register('floatingbutton', AdminContactsViewSet) #URL для плавающей кнопки
 router.register('callback', CallBackViewSet) #URL для обратного звонка
+router.register('cart', CartViewSet) #URL для корзины
+router.register('favorite', FavoriteViewSet) #URL для избранных
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +27,5 @@ urlpatterns = [
     path('api/v1/new_products/', new_products), #URL для новинок
     path('api/v1/bestseller/', bestseller), #URL для хит продаж
     path('api/v1/novinki/', novinki), #URL для новинок на главной странице
+    path('api/v1/userinfo/', UserInfoView.as_view()), #URL для инофрмации о юзера
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

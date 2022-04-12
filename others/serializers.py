@@ -8,7 +8,7 @@ class AboutUsSerializer(serializers.ModelSerializer):
     """О нас"""
     class Meta:
         model = AboutUs
-        fields = '__all__'
+        exclude = ('id',)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)

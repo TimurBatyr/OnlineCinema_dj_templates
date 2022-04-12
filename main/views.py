@@ -3,10 +3,10 @@ from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-from .models import Product, ImageProduct, Collection, Colors
+from .models import Product, ImageProduct, Collection, Colors, Cart, UserInfo
 from .serializers import ProductSerializer, ImageSerializer, CollectionSerializer, ColorsSerializer, \
     SimilarProductSerializer, CollectionProductSerializer, NewProductSerializer, BestsellerSerializer, \
-    NovinkiSerializer
+    NovinkiSerializer, CartSerializer, UserInfoSerializer, FavoriteSerializer
 
 
 class Pagination(PageNumberPagination):
@@ -98,3 +98,22 @@ def novinki(request):
 class CollectionMainPageViewSet(CollectionViewSet):
     """Коллекция на главной странице: пагинация 8шт, фронтэндщики сделают список по 4 шт"""
     pass
+
+
+class CartViewSet(viewsets.ModelViewSet):
+    """Корзина. Удаление при запросе Delete"""
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
+
+
+class UserInfoView(generics.CreateAPIView):
+    """Информация Юзера"""
+    queryset = UserInfo.objects.all()
+    serializer_class = UserInfoSerializer
+
+
+class FavoriteViewSet(viewsets.ModelViewSet):
+    """Избранное"""
+    queryset = Product.objects.all()
+    serializer_class = FavoriteSerializer
+    pagination_class = CollectionProductPagination

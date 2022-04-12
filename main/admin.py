@@ -3,7 +3,7 @@ from django import forms
 
 from ckeditor.widgets import CKEditorWidget
 
-from .models import ImageProduct, Collection, Product, Colors
+from .models import ImageProduct, Collection, Product, Colors, Cart, UserInfo, Favorite
 
 
 class ImageInLine(admin.TabularInline):
@@ -35,3 +35,13 @@ class ProductAdmin(admin.ModelAdmin):
 
 admin.site.register(Collection)
 admin.site.register(Colors)
+admin.site.register(Cart)
+
+
+class UserInfoAdmin(admin.ModelAdmin):
+    search_fields = ('name', 'phone', 'last_name', 'email')
+    list_display = ['name', 'phone', 'last_name', 'email']
+
+
+admin.site.register(UserInfo, UserInfoAdmin)
+admin.site.register(Favorite)

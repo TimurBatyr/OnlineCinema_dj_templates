@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Colors, Collection, Product, ImageProduct
+from .models import Colors, Collection, Product, ImageProduct, Cart, UserInfo
 
 
 class ColorsSerializer(serializers.ModelSerializer):
@@ -24,7 +24,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('collection', 'name', 'item_number', 'colors', 'price', 'old_price', 'description', 'size',
+        fields = ('collection', 'name', 'item_number', 'colors', 'price', 'old_price', 'discount', 'description', 'size',
                   'material_composition', 'quantity_line', 'material', 'favorites',)
 
     def to_representation(self, instance):
@@ -72,6 +72,52 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ProductCartSerializer(ProductSerializer):
+    """Serializer для корзины"""
+    colors = ColorsSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Product
+        fields = ('name', 'item_number', 'colors', 'price', 'old_price', 'size',)
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['images'] = ImageSerializer(instance.images.all()[:1], many=True, context=self.context).data
+        return representation
 
 
+class CartSerializer(serializers.ModelSerializer):
+    """Корзина"""
+    product = ProductCartSerializer()
 
+    class Meta:
+        model = Cart
+        fields = "__all__"
+
+
+class UserInfoSerializer(serializers.ModelSerializer):
+    """Информация Юзера"""
+    created_at = serializers.DateTimeField(format='%d/%m/%Y %H:%M:%S', read_only=True)
+
+    class Meta:
+        model = UserInfo
+        fields = '__all__'
+
+
+# class FavoritesSerializer(serializers.ModelSerializer):
+#     """Избранное"""
+#     class Meta:
+#         model = Favorites
+#         fields = ('id', 'movie', 'favorites', 'owner',)
+
+
+class FavoriteSerializer(ProductSerializer):
+    """Избранное"""
+    class Meta:
+        model = Product
+        fields = ('name', 'price', 'old_price', 'discount', 'size', 'colors', 'id', 'favorites',)
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['images'] = ImageSerializer(instance.images.all()[:1], many=True, context=self.context).data
+        return representation
