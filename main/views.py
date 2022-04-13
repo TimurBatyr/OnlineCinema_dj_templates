@@ -1,5 +1,8 @@
+import random
+
 from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view
+from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
@@ -15,10 +18,18 @@ class Pagination(PageNumberPagination):
         return super().get_paginated_response(data)
 
 
+class SearchProductPagination(Pagination):
+    """Пагинация для поиска товаров"""
+    page_size = 12
+
+
 class ProductViewSet(viewsets.ModelViewSet):
     """Товар"""
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['name']
+    pagination_class = SearchProductPagination
 
 
 @api_view(['GET'])
@@ -117,3 +128,24 @@ class FavoriteViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = FavoriteSerializer
     pagination_class = CollectionProductPagination
+
+
+@api_view(['GET'])
+def search_product(request):
+    item = []
+    categories = Collection.objects.all().count()
+    if categories >= 5:
+        for i in Collection.objects.all().values_list('id')[0:5]:
+            if Product.objects.all().filter(collection=i).first() is None:
+                pass
+            else:
+                item.append(random.choice(Product.objects.all().filter(collection=i)))
+    else:
+        for i in Collection.objects.all().values_list('id')[0:categories]:
+            if Product.objects.all().filter(collection=i).first() is None:
+                pass
+            else:
+                item.append(random.choice(Product.objects.all().filter(collection=i)))
+    serializer = SimilarProductSerializer(item, many=True)
+    return Response(serializer.data)
+

@@ -24,7 +24,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('collection', 'name', 'item_number', 'colors', 'price', 'old_price', 'discount', 'description', 'size',
+        fields = ('id', 'collection', 'name', 'item_number', 'colors', 'price', 'old_price', 'discount', 'description', 'size',
                   'material_composition', 'quantity_line', 'material', 'favorites',)
 
     def to_representation(self, instance):
@@ -37,7 +37,7 @@ class SimilarProductSerializer(ProductSerializer):
     """Товары по категории"""
     class Meta:
         model = Product
-        fields = ('id', 'name', 'price', 'old_price', 'discount', 'size', 'colors', 'favorites',)
+        fields = ('id', 'name', 'price', 'old_price', 'discount', 'size', 'colors', 'favorites', )
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)

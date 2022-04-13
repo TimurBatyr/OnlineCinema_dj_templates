@@ -43,10 +43,12 @@ INSTALLED_APPS = [
     'colorful',
     'django_filters',
     'drf_multiple_model',
+    'drf_yasg',
 
     #myapps
     'main',
     'others',
+
 ]
 
 MIDDLEWARE = [

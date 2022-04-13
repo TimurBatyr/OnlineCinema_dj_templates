@@ -2,10 +2,23 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
 
 from main.views import *
 from others.views import SliderViewSet, ExcellenceViewSet, AdminContactsViewSet, CallBackViewSet
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title='OnlineShop',
+        description='online_shop',
+        default_version='v1'
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny, ),
+)
 
 router = DefaultRouter()
 router.register('product', ProductViewSet) #URL для товара +id
@@ -20,6 +33,7 @@ router.register('favorite', FavoriteViewSet) #URL для избранных
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/docs/', schema_view.with_ui('swagger')),
     path('api/v1/', include('others.urls')),
     path('api/v1/', include(router.urls)),
     path('api/v1/products/filter/<str:name>/', filter, name="filter"), #URL для фильтрации товаров в категории
@@ -28,4 +42,5 @@ urlpatterns = [
     path('api/v1/bestseller/', bestseller), #URL для хит продаж
     path('api/v1/novinki/', novinki), #URL для новинок на главной странице
     path('api/v1/userinfo/', UserInfoView.as_view()), #URL для инофрмации о юзера
+    path('api/v1/search_product/', search_product), #URL для 5шт товаров из коллекции при отсутствии товара в поисковике
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
