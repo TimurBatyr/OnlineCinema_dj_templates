@@ -108,7 +108,18 @@ class Cart(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'Корзина № {self.id}- количество линеек {self.size_line_qty}'
+        return f'{self.user.name} - Корзина № {self.id}- количество линеек {self.size_line_qty}'
+
+    def user_details(self):
+        result = {
+            'Name': self.user.name,
+            'Last name': self.user.last_name,
+            'Email': self.user.email,
+            'Phone': str(self.user.phone),
+            'Country': self.user.country,
+            'City': self.user.city
+        }
+        return result
 
 
 class UserInfo(models.Model):

@@ -99,7 +99,6 @@ class CartSerializer(serializers.ModelSerializer):
         model = Cart
         fields = "__all__"
 
-
 class UserInfoSerializer(serializers.ModelSerializer):
     """Информация Юзера"""
     created_at = serializers.DateTimeField(format='%d/%m/%Y %H:%M:%S', read_only=True)

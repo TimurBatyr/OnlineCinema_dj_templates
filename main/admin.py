@@ -45,6 +45,7 @@ class CartItemAdmin(admin.ModelAdmin):
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     readonly_fields = ['size_line_qty', 'products_qty', 'discount', 'price', 'total_price']
+    readonly_fields += ['user_details']
 
 
 class UserInfoAdmin(admin.ModelAdmin):
