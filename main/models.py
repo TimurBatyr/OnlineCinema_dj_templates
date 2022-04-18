@@ -4,8 +4,6 @@ from django.db import models
 from ckeditor.fields import RichTextField
 from colorful.fields import RGBColorField
 
-from online_shop import settings
-
 
 class Colors(models.Model):
     """Цвета для товаров"""
@@ -45,6 +43,7 @@ class Product(models.Model):
     new = models.BooleanField(default=True)
     colors = models.ManyToManyField(Colors, related_name='product')
     collection = models.ForeignKey(Collection, on_delete=models.DO_NOTHING, null=True, blank=True)
+    image_cart = models.ImageField(upload_to='images', blank=True)
 
 
     def clean(self):
@@ -70,7 +69,7 @@ class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     size = models.CharField(max_length=50, null=True)
     cart_item_color = models.ForeignKey(Colors, on_delete=models.CASCADE, related_name='cart_item_color')
-    image = models.CharField(max_length= 50, null=True)
+    image = models.ImageField(upload_to='images', null=True)
     price = models.IntegerField(null=True, blank=True, default=0)
     old_price = models.PositiveIntegerField(null=True, blank=True)
     qty = models.PositiveSmallIntegerField(default=1)
@@ -85,20 +84,31 @@ class CartItem(models.Model):
         self.price = product.price
         self.old_price = product.old_price
         self.final_price = self.qty * self.price
-        self.image = product.images.first()
+        self.image = product.image_cart
         super().save(*args, **kwargs)
 
 
 class Cart(models.Model):
+    """Корзина"""
     user = models.OneToOneField('UserInfo', null=True, on_delete=models.CASCADE)
-    size_line_number = models.IntegerField(null=True)
-    products_quantity = models.IntegerField(null=True)
+    size_line_qty = models.IntegerField(null=True)
+    products_qty = models.IntegerField(null=True)
+    price = models.IntegerField(null=True)
+    discount = models.IntegerField(null=True)
     total_price = models.IntegerField(null=True)
-    sale = models.IntegerField(null=True)
-    total_price_after_sale = models.IntegerField(null=True)
 
-    def str(self):
-        return self.user.name
+    def save(self, *args, **kwargs):
+        if self.id:
+            cart_item = CartItem.objects.all().filter(cart_id=self.id)
+            self.size_line_qty = cart_item.count()
+            self.products_qty = self.size_line_qty * 5
+            self.discount = (sum([i.old_price for i in cart_item]) - sum([i.price for i in cart_item])) * sum([i.qty for i in cart_item])
+            self.price = sum([i.old_price for i in cart_item]) * sum([i.qty for i in cart_item])
+            self.total_price = self.price - self.discount
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'Корзина № {self.id}- количество линеек {self.size_line_qty}'
 
 
 class UserInfo(models.Model):

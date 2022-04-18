@@ -6,10 +6,10 @@ from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-from .models import Product, ImageProduct, Collection, Colors, CartItem, UserInfo
+from .models import Product, ImageProduct, Collection, Colors, CartItem, UserInfo, Cart
 from .serializers import ProductSerializer, ImageSerializer, CollectionSerializer, ColorsSerializer, \
     SimilarProductSerializer, CollectionProductSerializer, NewProductSerializer, BestsellerSerializer, \
-    NovinkiSerializer, UserInfoSerializer, FavoriteSerializer, CartItemSerializer
+    UserInfoSerializer, FavoriteSerializer, CartItemSerializer, CartSerializer, LatestSerializer
 
 
 class Pagination(PageNumberPagination):
@@ -99,10 +99,10 @@ def bestseller(request):
 
 
 @api_view(['GET'])
-def novinki(request):
+def latest(request):
     """Новинки на главной странице: пагинация 8шт, фронтэндщики сделают список по 4 шт"""
-    novinki = Product.objects.all().filter(new=True)[0:8]
-    serializer = NovinkiSerializer(novinki, many=True)
+    latest = Product.objects.all().filter(new=True)[0:8]
+    serializer = LatestSerializer(latest, many=True)
     return Response(serializer.data)
 
 
@@ -112,9 +112,15 @@ class CollectionMainPageViewSet(CollectionViewSet):
 
 
 class CartItemViewSet(viewsets.ModelViewSet):
-    """Корзина. Удаление при запросе Delete"""
+    """Корзина инфо товары. Удаление при запросе Delete"""
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer
+
+
+class CartViewSet(viewsets.ModelViewSet):
+    """Корзина"""
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
 
 
 class UserInfoView(generics.CreateAPIView):

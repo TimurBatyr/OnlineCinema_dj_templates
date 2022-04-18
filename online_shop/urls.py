@@ -28,7 +28,8 @@ router.register('collections_mainpage', CollectionMainPageViewSet) #URL для �
 router.register('excellence', ExcellenceViewSet) #URL для наших преимуществ на главной странице
 router.register('floatingbutton', AdminContactsViewSet) #URL для плавающей кнопки
 router.register('callback', CallBackViewSet) #URL для обратного звонка
-router.register('cartitem', CartItemViewSet) #URL для корзины
+router.register('cartitem', CartItemViewSet) #URL для корзины/инфо товары
+router.register('cart', CartViewSet) #URL для корзины
 router.register('favorite', FavoriteViewSet) #URL для избранных
 
 urlpatterns = [
@@ -40,7 +41,7 @@ urlpatterns = [
     path('api/v1/collection/<int:pk>/', CollectionProductView.as_view()), #URL для коллекции товаров
     path('api/v1/new_products/', new_products), #URL для новинок
     path('api/v1/bestseller/', bestseller), #URL для хит продаж
-    path('api/v1/novinki/', novinki), #URL для новинок на главной странице
+    path('api/v1/latest/', latest), #URL для новинок на главной странице
     path('api/v1/userinfo/', UserInfoView.as_view()), #URL для инофрмации о юзера
     path('api/v1/search_product/', search_product), #URL для 5шт товаров из коллекции при отсутствии товара в поисковике
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

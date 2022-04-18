@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Colors, Collection, Product, ImageProduct, CartItem, UserInfo
+from .models import Colors, Collection, Product, ImageProduct, CartItem, UserInfo, Cart
 
 
 class ColorsSerializer(serializers.ModelSerializer):
@@ -24,8 +24,8 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'collection', 'name', 'item_number', 'colors', 'price', 'old_price', 'discount', 'description', 'size',
-                  'material_composition', 'quantity_line', 'material', 'favorites',)
+        fields = ('id', 'collection', 'name', 'item_number', 'colors', 'price', 'old_price', 'discount', 'description',
+                  'size','material_composition', 'quantity_line', 'material', 'favorites',)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -60,7 +60,7 @@ class BestsellerSerializer(SimilarProductSerializer):
     pass
 
 
-class NovinkiSerializer(SimilarProductSerializer):
+class LatestSerializer(SimilarProductSerializer):
     """Новинки на главной странце"""
     pass
 
@@ -87,9 +87,16 @@ class ProductCartSerializer(ProductSerializer):
 
 
 class CartItemSerializer(serializers.ModelSerializer):
-    """Корзина"""
+    """Корзина инфо"""
     class Meta:
         model = CartItem
+        fields = "__all__"
+
+
+class CartSerializer(serializers.ModelSerializer):
+    """Корзина"""
+    class Meta:
+        model = Cart
         fields = "__all__"
 
 
@@ -100,13 +107,6 @@ class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserInfo
         fields = '__all__'
-
-
-# class FavoritesSerializer(serializers.ModelSerializer):
-#     """Избранное"""
-#     class Meta:
-#         model = Favorites
-#         fields = ('id', 'movie', 'favorites', 'owner',)
 
 
 class FavoriteSerializer(ProductSerializer):
