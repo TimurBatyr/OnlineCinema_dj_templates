@@ -6,10 +6,10 @@ from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-from .models import Product, ImageProduct, Collection, Colors, Cart, UserInfo
+from .models import Product, ImageProduct, Collection, Colors, CartItem, UserInfo
 from .serializers import ProductSerializer, ImageSerializer, CollectionSerializer, ColorsSerializer, \
     SimilarProductSerializer, CollectionProductSerializer, NewProductSerializer, BestsellerSerializer, \
-    NovinkiSerializer, CartSerializer, UserInfoSerializer, FavoriteSerializer
+    NovinkiSerializer, UserInfoSerializer, FavoriteSerializer, CartItemSerializer
 
 
 class Pagination(PageNumberPagination):
@@ -111,10 +111,10 @@ class CollectionMainPageViewSet(CollectionViewSet):
     pass
 
 
-class CartViewSet(viewsets.ModelViewSet):
+class CartItemViewSet(viewsets.ModelViewSet):
     """Корзина. Удаление при запросе Delete"""
-    queryset = Cart.objects.all()
-    serializer_class = CartSerializer
+    queryset = CartItem.objects.all()
+    serializer_class = CartItemSerializer
 
 
 class UserInfoView(generics.CreateAPIView):
@@ -132,20 +132,21 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 
 @api_view(['GET'])
 def search_product(request):
+    """При поиске если нет совпадений. 5 товаров с каждой категории по одной"""
     item = []
     categories = Collection.objects.all().count()
     if categories >= 5:
-        for i in Collection.objects.all().values_list('id')[0:5]:
-            if Product.objects.all().filter(collection=i).first() is None:
+        for collection in Collection.objects.all().values_list('id')[0:5]:
+            if Product.objects.all().filter(collection=collection).first() is None:
                 pass
             else:
-                item.append(random.choice(Product.objects.all().filter(collection=i)))
+                item.append(random.choice(Product.objects.all().filter(collection=collection)))
     else:
-        for i in Collection.objects.all().values_list('id')[0:categories]:
-            if Product.objects.all().filter(collection=i).first() is None:
+        for collection in Collection.objects.all().values_list('id')[0:categories]:
+            if Product.objects.all().filter(collection=collection).first() is None:
                 pass
             else:
-                item.append(random.choice(Product.objects.all().filter(collection=i)))
+                item.append(random.choice(Product.objects.all().filter(collection=collection)))
     serializer = SimilarProductSerializer(item, many=True)
     return Response(serializer.data)
 

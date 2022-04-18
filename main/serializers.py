@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Colors, Collection, Product, ImageProduct, Cart, UserInfo
+from .models import Colors, Collection, Product, ImageProduct, CartItem, UserInfo
 
 
 class ColorsSerializer(serializers.ModelSerializer):
@@ -86,12 +86,10 @@ class ProductCartSerializer(ProductSerializer):
         return representation
 
 
-class CartSerializer(serializers.ModelSerializer):
+class CartItemSerializer(serializers.ModelSerializer):
     """Корзина"""
-    product = ProductCartSerializer()
-
     class Meta:
-        model = Cart
+        model = CartItem
         fields = "__all__"
 
 

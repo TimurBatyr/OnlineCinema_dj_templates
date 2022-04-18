@@ -3,7 +3,7 @@ from django import forms
 
 from ckeditor.widgets import CKEditorWidget
 
-from .models import ImageProduct, Collection, Product, Colors, Cart, UserInfo, Favorite
+from .models import ImageProduct, Collection, Product, Colors, CartItem, UserInfo, Favorite, Cart
 
 
 class ImageInLine(admin.TabularInline):
@@ -35,6 +35,13 @@ class ProductAdmin(admin.ModelAdmin):
 
 admin.site.register(Collection)
 admin.site.register(Colors)
+
+
+@admin.register(CartItem)
+class CartItemAdmin(admin.ModelAdmin):
+    readonly_fields = ['size', 'image']
+
+
 admin.site.register(Cart)
 
 

@@ -62,41 +62,43 @@ class ImageProduct(models.Model):
     """Фотографии для товара"""
     image = models.ImageField(upload_to='images')
     product = models.ForeignKey(Product, on_delete=models.DO_NOTHING, related_name='images')
-    # cart = models.ForeignKey('Cart', on_delete=models.DO_NOTHING, related_name='images')
+
+
+class CartItem(models.Model):
+    """Корзина/товары"""
+    cart = models.ForeignKey('Cart', on_delete=models.CASCADE, related_name='cart_item')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    size = models.CharField(max_length=50, null=True)
+    cart_item_color = models.ForeignKey(Colors, on_delete=models.CASCADE, related_name='cart_item_color')
+    image = models.CharField(max_length= 50, null=True)
+    price = models.IntegerField(null=True, blank=True, default=0)
+    old_price = models.PositiveIntegerField(null=True, blank=True)
+    qty = models.PositiveSmallIntegerField(default=1)
+    final_price = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+
+    def __str__(self):
+         return f'{self.product.name} : {self.qty} pcs'
+
+    def save(self, *args, ** kwargs):
+        product = Product.objects.get(pk=self.product_id)
+        self.size = product.size
+        self.price = product.price
+        self.old_price = product.old_price
+        self.final_price = self.qty * self.price
+        self.image = product.images.first()
+        super().save(*args, **kwargs)
 
 
 class Cart(models.Model):
-    """Корзина/товары"""
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    # order_info = models.ForeignKey('OrderInfo', on_delete=models.CASCADE)
-    quantity = models.PositiveSmallIntegerField(default=1)
-    # final_price = models.DecimalField(max_digits=20, default=0)
+    user = models.OneToOneField('UserInfo', null=True, on_delete=models.CASCADE)
+    size_line_number = models.IntegerField(null=True)
+    products_quantity = models.IntegerField(null=True)
+    total_price = models.IntegerField(null=True)
+    sale = models.IntegerField(null=True)
+    total_price_after_sale = models.IntegerField(null=True)
 
-    def __str__(self):
-         return f'{self.product.name} : {self.quantity} pcs'
-
-
-# class OrderInfo(Cart):
-#     """Информация заказа"""
-#     products = models.ManyToManyField(Cart, blank=True)
-#     total_products = models.PositiveIntegerField(default=0)
-#
-#
-#
-#     def save(self, *args, **kwargs):
-#         self.total_products = self.products.count()
-#         self.final_price = sum([cproduct.final_price for cproduct in self.products.all()])
-#         super().save(*args, **kwargs)
-
-
-#     total_price = models.PositiveIntegerField(default=0)
-#     skidka = models.IntegerField(blank=True, default=0)
-#
-#     def clean(self):
-#         self.skidka = int(self.old_price - self.price)
-#
-#     def save(self):
+    def str(self):
+        return self.user.name
 
 
 class UserInfo(models.Model):
@@ -125,21 +127,4 @@ class Favorite(models.Model):
     def __str__(self):
         return f'{self.product.favorites} - {self.product}'
 
-
-
-
-# class SubProduct(models.Model):
-#     """Подпродукт"""
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='sub_products')
-#     color = models.ManyToManyField('Colors', related_name='sub_products')
-#     qty = models.PositiveSmallIntegerField(default=0)
-#     deleted = models.BooleanField(default=False)
-#
-#     def clean(self):
-#         # Максимум цветов
-#         if len(SubProduct.objects.filter(product=self.product)) > 8:
-#             raise ValidationError('Number of colors cannot exceed 8!')
-#
-#     def __str__(self):
-#         return f'{self.product} - {self.color}: {self.qty}'
 

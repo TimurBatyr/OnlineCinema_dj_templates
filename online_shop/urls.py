@@ -28,7 +28,7 @@ router.register('collections_mainpage', CollectionMainPageViewSet) #URL для �
 router.register('excellence', ExcellenceViewSet) #URL для наших преимуществ на главной странице
 router.register('floatingbutton', AdminContactsViewSet) #URL для плавающей кнопки
 router.register('callback', CallBackViewSet) #URL для обратного звонка
-router.register('cart', CartViewSet) #URL для корзины
+router.register('cartitem', CartItemViewSet) #URL для корзины
 router.register('favorite', FavoriteViewSet) #URL для избранных
 
 urlpatterns = [
