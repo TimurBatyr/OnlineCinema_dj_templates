@@ -2,16 +2,15 @@ from django.core.exceptions import ValidationError
 from django.db import models
 
 from ckeditor.fields import RichTextField
-from colorful.fields import RGBColorField
-
+from colorfield.fields import ColorField
 
 class Colors(models.Model):
     """Цвета для товаров"""
+    color = ColorField(default='#FF0000')
     name = models.CharField(max_length=50)
-    color = RGBColorField()
 
     def __str__(self):
-        return self.name
+        return f'{self.color} - {self.name}'
 
 
 class Collection(models.Model):
@@ -41,8 +40,8 @@ class Product(models.Model):
     favorites = models.BooleanField(default=False)
     bestseller = models.BooleanField(default=False)
     new = models.BooleanField(default=True)
-    colors = models.ManyToManyField(Colors, related_name='product')
-    collection = models.ForeignKey(Collection, on_delete=models.DO_NOTHING, null=True, blank=True)
+    colors = models.ManyToManyField(Colors, related_name='product', blank=True)
+    collection = models.ForeignKey(Collection, on_delete=models.DO_NOTHING, blank=True)
     image_cart = models.ImageField(upload_to='images', blank=True)
 
 
@@ -68,7 +67,7 @@ class CartItem(models.Model):
     cart = models.ForeignKey('Cart', on_delete=models.CASCADE, related_name='cart_item')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     size = models.CharField(max_length=50, null=True)
-    cart_item_color = models.ForeignKey(Colors, on_delete=models.CASCADE, related_name='cart_item_color')
+    cart_item_color = models.ForeignKey(Colors, on_delete=models.DO_NOTHING, related_name='cart_item_color')
     image = models.ImageField(upload_to='images', null=True)
     price = models.IntegerField(null=True, blank=True, default=0)
     old_price = models.PositiveIntegerField(null=True, blank=True)

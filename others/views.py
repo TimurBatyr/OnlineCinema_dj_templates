@@ -4,6 +4,7 @@ from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from main.views import Pagination
 from .models import AboutUs, News, Help, ImageHelp, PublicOffer, Slider, Excellence, Header, Footer, AdminContacts, \
     CallBack
 from .serializers import AboutUsSerializer, NewsSerializer, ImageHelpSerializer, HelpSerializer, PublicOfferSerializer, \
@@ -19,24 +20,28 @@ def about_us(request):
     return Response(serializer.data)
 
 
-@api_view(['GET'])
-def news(request):
+class NewsPagination(Pagination):
+    """Пагинациия для новостей"""
+    page_size = 8
+
+
+class NewsViewSet(viewsets.ModelViewSet):
     """Новости"""
-    news = News.objects.all()[:8]
-    serializer = NewsSerializer(news, many=True)
-    return Response(serializer.data)
+    queryset = News.objects.all()
+    serializer_class = NewsSerializer
+    pagination_class = NewsPagination
 
 
 class HelpView(generics.ListCreateAPIView):
     """Помощь"""
     queryset = Help.objects.all()
-
+    serializer_class = HelpSerializer
     def get(self, request):
-        get_image = ImageHelp.objects.first()
+        get_image = ImageHelp.objects.all().first()
         image = ImageHelpSerializer(get_image)
         queryset = Help.objects.all()
         serializers = HelpSerializer(queryset, many=True)
-        return Response([image.data, serializers.data])
+        return Response([serializers.data, image.data])
 
 
 class PublicOfferView(generics.ListCreateAPIView):

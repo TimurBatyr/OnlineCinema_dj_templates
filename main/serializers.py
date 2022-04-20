@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Colors, Collection, Product, ImageProduct, CartItem, UserInfo, Cart
+from .models import Colors, Collection, Product, ImageProduct, CartItem, UserInfo, Cart, Favorite
 
 
 class ColorsSerializer(serializers.ModelSerializer):
@@ -99,6 +99,7 @@ class CartSerializer(serializers.ModelSerializer):
         model = Cart
         fields = "__all__"
 
+
 class UserInfoSerializer(serializers.ModelSerializer):
     """Информация Юзера"""
     created_at = serializers.DateTimeField(format='%d/%m/%Y %H:%M:%S', read_only=True)
@@ -118,3 +119,10 @@ class FavoriteSerializer(ProductSerializer):
         representation = super().to_representation(instance)
         representation['images'] = ImageSerializer(instance.images.all()[:1], many=True, context=self.context).data
         return representation
+
+
+class FavoriteListSerializer(serializers.ModelSerializer):
+    """Избранное пост запрос"""
+    class Meta:
+        model = Favorite
+        fields = "__all__"

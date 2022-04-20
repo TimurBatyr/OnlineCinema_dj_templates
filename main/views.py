@@ -6,10 +6,10 @@ from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-from .models import Product, ImageProduct, Collection, Colors, CartItem, UserInfo, Cart
+from .models import Product, ImageProduct, Collection, Colors, CartItem, UserInfo, Cart, Favorite
 from .serializers import ProductSerializer, ImageSerializer, CollectionSerializer, ColorsSerializer, \
     SimilarProductSerializer, CollectionProductSerializer, NewProductSerializer, BestsellerSerializer, \
-    UserInfoSerializer, FavoriteSerializer, CartItemSerializer, CartSerializer, LatestSerializer
+    UserInfoSerializer, FavoriteSerializer, CartItemSerializer, CartSerializer, LatestSerializer, FavoriteListSerializer
 
 
 class Pagination(PageNumberPagination):
@@ -90,20 +90,18 @@ def new_products(request):
     return Response(serializer.data)
 
 
-@api_view(['GET'])
-def bestseller(request):
+class BestsellerViewSet(viewsets.ModelViewSet):
     """Хит продаж"""
-    bestsellers = Product.objects.all().filter(bestseller=True)[0:8]
-    serializer = BestsellerSerializer(bestsellers, many=True)
-    return Response(serializer.data)
+    queryset = Product.objects.all().filter(bestseller=True)
+    serializer_class = BestsellerSerializer
+    pagination_class = CollectionPagination
 
 
-@api_view(['GET'])
-def latest(request):
+class LatestViewSet(viewsets.ModelViewSet):
     """Новинки на главной странице: пагинация 8шт, фронтэндщики сделают список по 4 шт"""
-    latest = Product.objects.all().filter(new=True)[0:8]
-    serializer = LatestSerializer(latest, many=True)
-    return Response(serializer.data)
+    queryset = Product.objects.all().filter(new=True)
+    serializer_class = LatestSerializer
+    pagination_class = CollectionPagination
 
 
 class CollectionMainPageViewSet(CollectionViewSet):
@@ -136,6 +134,12 @@ class FavoriteViewSet(viewsets.ModelViewSet):
     pagination_class = CollectionProductPagination
 
 
+class FavoriteListViewSet(viewsets.ModelViewSet):
+    """Избранное пост запрос"""
+    queryset = Favorite.objects.all()
+    serializer_class = FavoriteListSerializer
+
+
 @api_view(['GET'])
 def search_product(request):
     """При поиске если нет совпадений. 5 товаров с каждой категории по одной"""
@@ -143,13 +147,13 @@ def search_product(request):
     categories = Collection.objects.all().count()
     if categories >= 5:
         for collection in Collection.objects.all().values_list('id')[0:5]:
-            if Product.objects.all().filter(collection=collection).first() is None:
+            if Product.objects.order_by('?').filter(collection=collection).first() is None:
                 pass
             else:
                 item.append(random.choice(Product.objects.all().filter(collection=collection)))
     else:
         for collection in Collection.objects.all().values_list('id')[0:categories]:
-            if Product.objects.all().filter(collection=collection).first() is None:
+            if Product.objects.order_by('?').filter(collection=collection).first() is None:
                 pass
             else:
                 item.append(random.choice(Product.objects.all().filter(collection=collection)))

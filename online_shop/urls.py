@@ -8,7 +8,7 @@ from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
 
 from main.views import *
-from others.views import SliderViewSet, ExcellenceViewSet, AdminContactsViewSet, CallBackViewSet
+from others.views import SliderViewSet, ExcellenceViewSet, AdminContactsViewSet, CallBackViewSet, NewsViewSet
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -31,6 +31,10 @@ router.register('callback', CallBackViewSet) #URL для обратного зв
 router.register('cartitem', CartItemViewSet) #URL для корзины/инфо товары
 router.register('cart', CartViewSet) #URL для корзины
 router.register('favorite', FavoriteViewSet) #URL для избранных
+router.register('favorite_list', FavoriteListViewSet) #URL для избранных
+router.register('bestseller', BestsellerViewSet) #URL для хит продаж
+router.register('latest', LatestViewSet) #URL для новинок на главной странице
+router.register('news', NewsViewSet) #URL для новостей
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -40,8 +44,6 @@ urlpatterns = [
     path('api/v1/products/filter/<str:name>/', filter, name="filter"), #URL для фильтрации товаров в категории
     path('api/v1/collection/<int:pk>/', CollectionProductView.as_view()), #URL для коллекции товаров
     path('api/v1/new_products/', new_products), #URL для новинок
-    path('api/v1/bestseller/', bestseller), #URL для хит продаж
-    path('api/v1/latest/', latest), #URL для новинок на главной странице
     path('api/v1/userinfo/', UserInfoView.as_view()), #URL для инофрмации о юзера
     path('api/v1/search_product/', search_product), #URL для 5шт товаров из коллекции при отсутствии товара в поисковике
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

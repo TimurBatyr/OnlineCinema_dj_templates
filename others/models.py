@@ -48,7 +48,7 @@ class Excellence(models.Model):
     """Наши преимущества"""
     icon = models.FileField(upload_to='images', validators=[FileExtensionValidator(['svg', 'png'])])
     header = models.CharField(max_length=100)
-    description = RichTextField()
+    description = models.TextField()
 
     def __str__(self):
         return self.header
@@ -72,7 +72,7 @@ class Slider(models.Model):
 class Header(models.Model):
     """Хэдер"""
     image = models.ImageField(upload_to='images')
-    infotext = RichTextField()
+    infotext = models.TextField()
     phone = models.CharField(max_length=20)
 
 

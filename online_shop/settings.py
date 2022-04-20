@@ -40,7 +40,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'ckeditor',
-    'colorful',
+    'colorfield',
     'django_filters',
     'drf_multiple_model',
     'drf_yasg',
