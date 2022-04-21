@@ -3,6 +3,8 @@ from django.db import models
 
 from ckeditor.fields import RichTextField
 from colorfield.fields import ColorField
+from ruamel import yaml
+
 
 class Colors(models.Model):
     """Цвета для товаров"""
@@ -67,6 +69,7 @@ class CartItem(models.Model):
     cart = models.ForeignKey('Cart', on_delete=models.CASCADE, related_name='cart_item')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     size = models.CharField(max_length=50, null=True)
+    size_line_number = models.IntegerField(null=True, blank=True)
     cart_item_color = models.ForeignKey(Colors, on_delete=models.DO_NOTHING, related_name='cart_item_color')
     image = models.ImageField(upload_to='images', null=True)
     price = models.IntegerField(null=True, blank=True, default=0)
@@ -80,6 +83,7 @@ class CartItem(models.Model):
     def save(self, *args, ** kwargs):
         product = Product.objects.get(pk=self.product_id)
         self.size = product.size
+        self.size_line_number = product.quantity_line
         self.price = product.price
         self.old_price = product.old_price
         self.final_price = self.qty * self.price
@@ -95,19 +99,27 @@ class Cart(models.Model):
     price = models.IntegerField(null=True)
     discount = models.IntegerField(null=True)
     total_price = models.IntegerField(null=True)
+    OrderStatus = (
+        ('New', 'New'),
+        ('Ordered', 'Ordered'),
+        ('Canceled', 'Canceled'))
+    status = models.CharField(max_length=50, choices=OrderStatus, default=OrderStatus[0])
 
     def save(self, *args, **kwargs):
         if self.id:
             cart_item = CartItem.objects.all().filter(cart_id=self.id)
             self.size_line_qty = cart_item.count()
-            self.products_qty = self.size_line_qty * 5
+            result = 0
+            for item in cart_item:
+                result += item.size_line_number * item.qty
+            self.products_qty = result
             self.discount = (sum([i.old_price for i in cart_item]) - sum([i.price for i in cart_item])) * sum([i.qty for i in cart_item])
             self.price = sum([i.old_price for i in cart_item]) * sum([i.qty for i in cart_item])
             self.total_price = self.price - self.discount
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.user.name} - Корзина № {self.id}- количество линеек {self.size_line_qty}'
+        return f'{self.user.name} - Корзина № {self.id} - статус {self.status}'
 
     def user_details(self):
         result = {
@@ -116,17 +128,14 @@ class Cart(models.Model):
             'Email': self.user.email,
             'Phone': str(self.user.phone),
             'Country': self.user.country,
-            'City': self.user.city
+            'City': self.user.city,
+            'Created_at': self.user.created_at
         }
-        return result
+        return yaml.dump(result, default_flow_style=False)
 
 
 class UserInfo(models.Model):
     """Информация юзера"""
-    OrderStatus = (
-        ('New', 'New'),
-        ('Ordered', 'Ordered'),
-        ('Canceled', 'Canceled'))
     name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50, blank=True)
     email = models.EmailField(max_length=100)
@@ -134,10 +143,9 @@ class UserInfo(models.Model):
     country = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=50, choices=OrderStatus, default=OrderStatus[0])
 
     def __str__(self):
-         return f'{self.name} : {self.created_at} : {self.status}'
+         return f'{self.name}'
 
 
 class Favorite(models.Model):

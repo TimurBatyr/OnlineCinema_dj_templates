@@ -37,15 +37,16 @@ admin.site.register(Collection)
 admin.site.register(Colors)
 
 
-@admin.register(CartItem)
-class CartItemAdmin(admin.ModelAdmin):
+class CartItemAdmin(admin.StackedInline):
     readonly_fields = ['size', 'image']
+    model = CartItem
 
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     readonly_fields = ['size_line_qty', 'products_qty', 'discount', 'price', 'total_price']
     readonly_fields += ['user_details']
+    inlines = [CartItemAdmin]
 
 
 class UserInfoAdmin(admin.ModelAdmin):

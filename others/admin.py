@@ -53,18 +53,6 @@ class PublicOfferAdmin(admin.ModelAdmin):
         model = PublicOffer
 
 
-@admin.register(Footer)
-class FooterAdmin(admin.ModelAdmin):
-    def has_add_permission(self, request):
-        no_add = super().has_add_permission(request)
-        if no_add and Footer.objects.exists():
-            no_add = False
-        return no_add
-
-    class Meta:
-        model = Footer
-
-
 @admin.register(Header)
 class HeaderAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
@@ -76,6 +64,8 @@ class HeaderAdmin(admin.ModelAdmin):
     class Meta:
         model = Header
 
+
+admin.site.register(Footer)
 admin.site.register(Slider)
 admin.site.register(AdminContacts)
 

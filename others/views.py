@@ -44,7 +44,7 @@ class HelpView(generics.ListCreateAPIView):
         return Response([serializers.data, image.data])
 
 
-class PublicOfferView(generics.ListCreateAPIView):
+class PublicOfferView(generics.ListAPIView):
     """Публичная оферта"""
     queryset = PublicOffer.objects.all()
     serializer_class = PublicOfferSerializer
