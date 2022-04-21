@@ -2,6 +2,7 @@ from django.contrib import admin
 from django import forms
 
 from ckeditor.widgets import CKEditorWidget
+from django.utils.safestring import mark_safe
 
 from .models import ImageProduct, Collection, Product, Colors, CartItem, UserInfo, Favorite, Cart
 
@@ -38,8 +39,11 @@ admin.site.register(Colors)
 
 
 class CartItemAdmin(admin.StackedInline):
-    readonly_fields = ['size', 'image']
+    readonly_fields = ['size', 'image', 'get_image']
     model = CartItem
+
+    def get_image(self, obj):
+        return mark_safe(f'<img src={obj.image.url} width="50" height="60')
 
 
 @admin.register(Cart)
