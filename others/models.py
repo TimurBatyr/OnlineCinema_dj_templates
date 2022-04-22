@@ -3,9 +3,10 @@ from django.db import models
 from django.core.validators import FileExtensionValidator
 
 from ckeditor.fields import RichTextField
+from solo.models import SingletonModel
 
 
-class AboutUs(models.Model):
+class AboutUs(SingletonModel):
     """О нас"""
     header = models.CharField(max_length=100)
     description = RichTextField()
@@ -54,7 +55,7 @@ class Excellence(models.Model):
         return self.header
 
 
-class PublicOffer(models.Model):
+class PublicOffer(SingletonModel):
     """Публичная оферта"""
     header = models.CharField(max_length=100)
     description = RichTextField()
@@ -69,7 +70,7 @@ class Slider(models.Model):
     link = models.URLField(blank=True)
 
 
-class Header(models.Model):
+class Header(SingletonModel):
     """Хэдер"""
     image = models.ImageField(upload_to='images')
     infotext = models.TextField()

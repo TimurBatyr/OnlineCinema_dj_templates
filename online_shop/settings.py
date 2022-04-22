@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_multiple_model',
     'drf_yasg',
+    'solo',
 
     #myapps
     'main',

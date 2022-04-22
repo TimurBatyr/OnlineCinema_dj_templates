@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from solo.admin import SingletonModelAdmin
+
 from .models import AboutUs, ImageAboutUs, News, Help, ImageHelp, Excellence, PublicOffer, Slider, Header, Footer, \
     AdminContacts, CallBack
 
@@ -11,7 +13,7 @@ class ImageAboutUsInLine(admin.TabularInline):
 
 
 @admin.register(AboutUs)
-class AboutUSAdmin(admin.ModelAdmin):
+class AboutUs(SingletonModelAdmin):
     inlines = [ImageAboutUsInLine, ]
 
     def has_add_permission(self, request):
@@ -42,7 +44,7 @@ class ImageHelpAdmin(admin.ModelAdmin):
 
 
 @admin.register(PublicOffer)
-class PublicOfferAdmin(admin.ModelAdmin):
+class PublicOffer(SingletonModelAdmin):
     def has_add_permission(self, request):
         no_add = super().has_add_permission(request)
         if no_add and PublicOffer.objects.exists():
@@ -54,7 +56,7 @@ class PublicOfferAdmin(admin.ModelAdmin):
 
 
 @admin.register(Header)
-class HeaderAdmin(admin.ModelAdmin):
+class Header(SingletonModelAdmin):
     def has_add_permission(self, request):
         no_add = super().has_add_permission(request)
         if no_add and Header.objects.exists():
