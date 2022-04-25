@@ -1,13 +1,12 @@
 # Installation 
-- To install the project, please, download it or clone this repository 
+1. To install the project, please, download it or clone this repository 
   
   - git clone
   
   https://github.com/TimurBatyr/OnlineShop_API
   
-- Open repository directory
 
-- Create virtual environment and activate virtual environment
+2. Create virtual environment and activate virtual environment
 
   - python3 -m venv venv 
   
@@ -15,9 +14,11 @@
 
   - cd OnlineShop
 
+3. Install moduls
+
   - pip install -r requirements.txt
 
-- Do migrations | migrate | create superuser manage.py
+4. Start project
 
   - python3 manage.py makemigrations
   
